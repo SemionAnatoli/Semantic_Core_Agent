@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+data/output/
+*.egg-info/
+.venv/
+venv/
+config/google_service_account.json
