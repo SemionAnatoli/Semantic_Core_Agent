@@ -10,3 +10,6 @@ venv/
 config/google_service_account.json
 claude_project_prompt.txt
 docs/
+.claude/
+.vercel/
+npm-debug.log*

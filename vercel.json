@@ -1,0 +1,48 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/app.js",
+      "destination": "/web/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/web/styles.css"
+    },
+    {
+      "source": "/dashboard/app.js",
+      "destination": "/web/app.js"
+    },
+    {
+      "source": "/dashboard/styles.css",
+      "destination": "/web/styles.css"
+    },
+    {
+      "source": "/",
+      "destination": "/web/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/web/index.html"
+    },
+    {
+      "source": "/dashboard/",
+      "destination": "/web/index.html"
+    }
+  ]
+}

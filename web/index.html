@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Semantic Core Agent: интерактивный SEO-пайплайн для расширения семантического ядра, кластеризации и подготовки контент-плана.">
+    <title>Semantic Core Agent</title>
+    <script>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem("sca-theme") || "light";
+      } catch {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="control-panel" aria-label="Параметры анализа">
+        <div class="brand-row">
+          <div class="brand-mark">SC</div>
+          <div>
+            <div class="brand-title">Semantic Core Agent</div>
+            <div class="brand-subtitle">SEO pipeline dashboard</div>
+          </div>
+        </div>
+
+        <form id="analysis-form" class="analysis-form">
+          <label class="field">
+            <span>Сайт</span>
+            <input id="site-url" name="siteUrl" type="text" value="mebel-dom.ru" autocomplete="off">
+          </label>
+
+          <label class="field">
+            <span>Бизнес</span>
+            <textarea id="business-description" name="businessDescription" rows="3">интернет-магазин мебели, продаём диваны, кресла, пуфы</textarea>
+          </label>
+
+          <label class="field">
+            <span>Стартовые ключи</span>
+            <textarea id="seed-keywords" name="seedKeywords" rows="4">купить диван
+угловой диван
+диван кровать</textarea>
+          </label>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>Гео</span>
+              <input id="geo" name="geo" type="text" value="Москва" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Язык</span>
+              <select id="language" name="language">
+                <option value="ru" selected>RU</option>
+                <option value="en">EN</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Страницы сайта</span>
+            <textarea id="target-pages" name="targetPages" rows="3">/catalog/divany/
+/catalog/uglovye-divany/
+/catalog/divany-krovati/</textarea>
+          </label>
+
+          <label class="field">
+            <span>Конкуренты</span>
+            <textarea id="competitors" name="competitors" rows="2">divan.ru
+hoff.ru</textarea>
+          </label>
+
+          <label class="field">
+            <span>Коммерческий приоритет</span>
+            <input id="commercial-priority" name="commercialPriority" type="text" value="диваны:5, кресла:3, пуфы:2" autocomplete="off">
+          </label>
+
+          <div class="switch-row">
+            <label class="switch">
+              <input id="mock-sources" type="checkbox" checked>
+              <span></span>
+              <b>Мок-источники</b>
+            </label>
+            <label class="switch">
+              <input id="competitor-mode" type="checkbox" checked>
+              <span></span>
+              <b>Конкуренты</b>
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button type="submit" class="button primary">Запустить</button>
+            <button type="button" id="demo-button" class="button">Демо</button>
+            <button type="button" id="reset-button" class="icon-button" title="Сбросить форму" aria-label="Сбросить форму">↺</button>
+          </div>
+        </form>
+
+        <div class="pipeline-panel">
+          <div class="panel-title">Pipeline</div>
+          <ol id="pipeline-steps" class="pipeline-steps"></ol>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <h1 id="report-title">Семантическое ядро</h1>
+          </div>
+          <div class="topbar-actions">
+            <button id="theme-toggle" class="icon-button theme-toggle" type="button" title="Включить тёмную тему" aria-label="Переключить тему" aria-pressed="false">
+              <span id="theme-toggle-icon">◐</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="summary-strip" aria-label="Ключевые показатели">
+          <div class="metric">
+            <span id="metric-raw">0</span>
+            <b>собрано</b>
+          </div>
+          <div class="metric">
+            <span id="metric-clean">0</span>
+            <b>после чистки</b>
+          </div>
+          <div class="metric">
+            <span id="metric-clusters">0</span>
+            <b>кластеров</b>
+          </div>
+          <div class="metric hot">
+            <span id="metric-high">0</span>
+            <b>high priority</b>
+          </div>
+          <div class="metric">
+            <span id="metric-create">0</span>
+            <b>создать</b>
+          </div>
+          <div class="metric">
+            <span id="metric-issues">0</span>
+            <b>рисков</b>
+          </div>
+        </section>
+
+        <nav class="tabs" aria-label="Разделы отчёта">
+          <button class="tab active" data-tab="overview">Обзор</button>
+          <button class="tab" data-tab="clusters">Кластеры</button>
+          <button class="tab" data-tab="risks">Риски</button>
+          <button class="tab" data-tab="briefs">ТЗ</button>
+          <button class="tab" data-tab="export">Экспорт</button>
+        </nav>
+
+        <section id="tab-overview" class="tab-panel active">
+          <div class="section-head">
+            <h2>Приоритеты</h2>
+            <span id="generated-at">—</span>
+          </div>
+          <div id="top-clusters" class="priority-grid"></div>
+
+          <div class="analytics-layout">
+            <section class="work-surface">
+              <div class="section-head tight">
+                <h2>Интенты</h2>
+              </div>
+              <div id="intent-chart" class="donut-layout"></div>
+            </section>
+            <section class="work-surface">
+              <div class="section-head tight">
+                <h2>Карта действий</h2>
+              </div>
+              <div id="action-chart" class="bar-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="tab-clusters" class="tab-panel">
+          <div class="table-toolbar">
+            <label class="search-field">
+              <span>Поиск</span>
+              <input id="cluster-search" type="search" placeholder="кластер, ключ, url">
+            </label>
+            <label class="compact-field">
+              <span>Интент</span>
+              <select id="intent-filter">
+                <option value="all">Все</option>
+              </select>
+            </label>
+            <label class="compact-field">
+              <span>Действие</span>
+              <select id="action-filter">
+                <option value="all">Все</option>
+              </select>
+            </label>
+          </div>
+          <div class="table-shell">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Кластер</th>
+                  <th>Интент</th>
+                  <th>URL</th>
+                  <th>Действие</th>
+                  <th>Score</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cluster-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="tab-risks" class="tab-panel">
+          <div class="section-head">
+            <h2>Каннибализация</h2>
+            <span id="risk-count">0 проблем</span>
+          </div>
+          <div id="risk-list" class="risk-list"></div>
+        </section>
+
+        <section id="tab-briefs" class="tab-panel">
+          <div class="section-head">
+            <h2>ТЗ для страниц</h2>
+            <button id="copy-briefs-button" class="button">Скопировать всё</button>
+          </div>
+          <div id="brief-list" class="brief-list"></div>
+        </section>
+
+        <section id="tab-export" class="tab-panel">
+          <div class="export-grid">
+            <button id="export-csv-button-2" class="export-tile">
+              <span>CSV</span>
+              <b>таблица для SEO и клиента</b>
+            </button>
+            <button id="export-json-button-2" class="export-tile">
+              <span>JSON</span>
+              <b>полный state пайплайна</b>
+            </button>
+            <button id="copy-plan-button-2" class="export-tile">
+              <span>PLAN</span>
+              <b>короткий action plan</b>
+            </button>
+          </div>
+          <pre id="export-preview" class="export-preview"></pre>
+        </section>
+      </main>
+    </div>
+
+    <aside id="detail-drawer" class="detail-drawer" aria-label="Детали кластера" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <div class="eyebrow">Cluster detail</div>
+          <h2 id="drawer-title">—</h2>
+        </div>
+        <button id="drawer-close" class="icon-button" title="Закрыть" aria-label="Закрыть">×</button>
+      </div>
+      <div id="drawer-body" class="drawer-body"></div>
+    </aside>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
