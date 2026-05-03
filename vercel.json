@@ -1,4 +1,8 @@
 {
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "headers": [
     {
@@ -17,32 +21,12 @@
   ],
   "rewrites": [
     {
-      "source": "/app.js",
-      "destination": "/web/app.js"
-    },
-    {
-      "source": "/styles.css",
-      "destination": "/web/styles.css"
-    },
-    {
-      "source": "/dashboard/app.js",
-      "destination": "/web/app.js"
-    },
-    {
-      "source": "/dashboard/styles.css",
-      "destination": "/web/styles.css"
-    },
-    {
-      "source": "/",
-      "destination": "/web/index.html"
-    },
-    {
       "source": "/dashboard",
-      "destination": "/web/index.html"
+      "destination": "/index.html"
     },
     {
       "source": "/dashboard/",
-      "destination": "/web/index.html"
+      "destination": "/index.html"
     }
   ]
 }

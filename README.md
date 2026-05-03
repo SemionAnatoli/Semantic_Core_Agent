@@ -35,7 +35,7 @@
 - экспорт CSV / JSON;
 - переключение светлой / тёмной темы.
 
-Деплой описан в `DEPLOY_VERCEL.md`. Для Vercel уже добавлен `vercel.json`.
+Деплой описан в `DEPLOY_VERCEL.md`. Для Vercel уже добавлены `package.json`, build-скрипт и `vercel.json`.
 
 ### Одним кликом
 

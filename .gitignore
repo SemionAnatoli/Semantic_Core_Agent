@@ -13,3 +13,4 @@ docs/
 .claude/
 .vercel/
 npm-debug.log*
+dist/

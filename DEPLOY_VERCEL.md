@@ -1,6 +1,8 @@
 # Деплой на Vercel
 
-Проект подготовлен как статическое SPA в папке `web/`. Оно работает без Node-сборки и без API-ключей: вся демо-логика пайплайна выполняется в браузере.
+Проект подготовлен как статическое SPA в папке `web/`. Оно работает без API-ключей: вся демо-логика пайплайна выполняется в браузере.
+
+Для Vercel добавлена явная Node-сборка: `npm run build` копирует `web/` в `dist/`. Это важно, потому что в репозитории также есть Python-часть и `requirements.txt`; без явной сборки Vercel может ошибочно искать FastAPI-приложение.
 
 ## Что увидит работодатель
 
@@ -21,15 +23,16 @@
 2. В Vercel выбрать `Add New Project`.
 3. Импортировать репозиторий.
 4. Framework Preset: `Other`.
-5. Build Command: оставить пустым.
-6. Output Directory: оставить пустым.
+5. Build Command: `npm run build`.
+6. Output Directory: `dist`.
 7. Нажать `Deploy`.
 
 Файл `vercel.json` уже настроен:
 
-- `/` открывает `web/index.html`;
-- `/dashboard` открывает тот же интерфейс;
-- `/app.js` и `/styles.css` корректно отдаются из папки `web/`.
+- Build Command: `npm run build`;
+- Output Directory: `dist`;
+- `/` открывает `dist/index.html`;
+- `/dashboard` открывает тот же интерфейс.
 
 ## Вариант 2: через Vercel CLI
 
@@ -41,8 +44,8 @@ vercel --prod
 Если CLI спросит настройки:
 
 - Framework: `Other`;
-- Build Command: пусто;
-- Output Directory: пусто.
+- Build Command: `npm run build`;
+- Output Directory: `dist`.
 
 ## Локальная проверка
 
@@ -53,3 +56,9 @@ web/index.html
 ```
 
 Или запустить любой статический сервер из корня проекта.
+
+Проверить Vercel-сборку локально:
+
+```bash
+npm run build
+```
